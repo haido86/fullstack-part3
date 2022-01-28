@@ -20,6 +20,7 @@
   "homepage": "https://github.com/haido86/fullstack-part3#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^14.3.2",
     "express": "^4.17.2",
     "mongoose": "^6.1.8",
     "morgan": "^1.10.0"
