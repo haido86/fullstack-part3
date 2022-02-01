@@ -35,7 +35,7 @@ app.get("/api/persons/:id", (request, response) => {
       response.json(person);
     })
     .catch((error) => {
-      response.send("error:" + error);
+      response.status(400).send("Person is not found");
     });
 });
 
@@ -54,20 +54,6 @@ app.post("/api/persons", (request, response) => {
     });
   }
 
-  Person.find({ name: body.name })
-    .then((res) => {
-      if (res.length > 0) {
-        response.status(400).json({
-          error: "name must be unique",
-        });
-        return;
-      }
-    })
-    .catch((error) => {
-      console.log("error", error);
-      response.send("error:" + error);
-    });
-
   const person = new Person({
     name: body.name,
     number: body.number,
@@ -81,6 +67,17 @@ app.post("/api/persons", (request, response) => {
 app.delete("/api/persons/:id", (request, response) => {
   Person.findByIdAndDelete(request.params.id).exec();
   response.status(204).end();
+});
+
+app.patch("/api/persons/:id", (request, response) => {
+  const _id = request.params.id;
+  Person.findByIdAndUpdate(_id, request.body, { new: true })
+    .then((res) => {
+      response.send(`${res.id} 's phone number has been updated` + res);
+    })
+    .catch((error) => {
+      response.status(400).send("Person is not found");
+    });
 });
 
 const PORT = process.env.PORT;
