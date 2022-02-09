@@ -73,12 +73,10 @@ app.delete("/api/persons/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.patch("/api/persons/:id", (request, response, next) => {
+app.put("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndUpdate(request.params.id, request.body, { new: true })
     .then((updatedPerson) => {
-      response.send(
-        `${updatedPerson.id} 's phone number has been updated ${updatedPerson}`
-      );
+      response.json(updatedPerson);
     })
     .catch((error) => next(error));
 });
