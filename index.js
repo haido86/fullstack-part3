@@ -43,21 +43,18 @@ app.get("/api/persons/:id", (request, response, next) => {
 app.post("/api/persons", (request, response, next) => {
   const body = request.body;
 
-  // if (!body.name) {
-  //   return response.status(400).json({
-  //     error: "name is missing",
-  //   });
-  // }
-
-  if (!body.number) {
-    return response.status(400).json({
-      error: "number is missing",
-    });
-  }
-
   const person = new Person({
     name: body.name,
     number: body.number,
+  });
+
+  Person.find({ name: body.name }).then((res) => {
+    console.log("res", res);
+    if (res.length > 0) {
+      return response.status(400).send({
+        error: `${body.name} is already added to phonebook, replace the old number with a new one?`,
+      });
+    }
   });
 
   person
