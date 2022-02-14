@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { response, request } = require("express");
+
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
@@ -50,6 +50,7 @@ app.post("/api/persons", (request, response, next) => {
 
   Person.find({ name: body.name }).then((res) => {
     console.log("res", res);
+
     if (res.length > 0) {
       return response.status(400).send({
         error: `${body.name} is already added to phonebook, replace the old number with a new one?`,
@@ -67,7 +68,7 @@ app.post("/api/persons", (request, response, next) => {
 
 app.delete("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));
@@ -95,6 +96,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler);
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
